@@ -1,0 +1,81 @@
+<h4>Tekst zadatka</h4>
+<p>U vertikalnoj ravnini nalazi se ploča s obojenim kuglicama, raspoređenim u <b>N redova</b> i točno <b>3 stupca</b>. Boje su predstavljene slovima.<br/>
+Igra se igra tako da u svakom potezu odabiremo stupac i uništavamo (uklanjamo s ploče) najdonju kuglicu iz tog stupca, nakon čega kuglice iznad automatski propadnu na dno.<br/>
+Na sljedećoj skici vidimo što se događa nakon što uništimo
+kuglicu u srednjem stupcu.
+<table>
+<tr>
+	<td>
+<pre>ABC
+DEF
+GHI
+JKL</pre>
+	</td>
+	<td>&nbsp&rarr&nbsp</td>
+	<td>
+<pre>A C
+DBF
+GEI
+JHL</pre>
+	</td>
+</tr>
+</table>
+
+Ukoliko se u najdonjem redu nađu sve tri kuglice iste boje, igrač <b>dobiva broj bodova koji odgovara rednom broju slova koje predstavlju tu boju</b> (npr. za red CCC ce to biti 3), te se potom najdonji red uništava na gore opisan način.<br/>
+Na sljedećoj skici vidimo jednu takvu situaciju iz prvog test primjera:
+<table>
+<tr>
+	<td>
+<pre>
+ B
+AA
+CCC
+</pre>
+	</td>
+	<td>&nbsp&rarr&nbsp</td>
+	<td>+3 boda</td>
+	<td>&nbsp&rarr&nbsp</td>
+	<td>
+<pre>
+
+ B
+AA
+</pre>
+	</td>
+</tr>
+</table>
+
+Igra završava kad se unište sve kuglice.</p>
+<p>Napišite program koji će uz <b>optimalnu</b> strategiju odrediti <b>najveći mogući broj bodova</b> koje igrač može sakupiti.</p>
+
+
+<h4>Ulazni podaci</h4>
+U prvom redu nalazi se prirodni broj N (<b>N <= 100</b>), broj redova s kuglicama.<br/>
+U sljedećih N redova nalazi se po tri znaka koji opisuju odgovarajući redak ploče. Ti znakovi biti će isključivo <b>velika slova engleske abacede ('A'-'Z')</b>.
+
+<h4>Izlazni podaci</h4>
+U jedini redak potrebno je ispisati broj tražen iz teksta zadatka.
+
+<h5>Test primjer #1</h5>
+<h5>Ulaz</h5>
+<pre>
+3
+ABC
+CAB
+BCA
+</pre>
+<h5>Izlaz</h5>
+3
+
+<h5>Test primjer #2</h5>
+<h5>Ulaz</h5>
+<pre>
+5
+BBA
+CAB
+FCH
+AFC
+HHF
+</pre>
+<h5>Izlaz</h5>
+11

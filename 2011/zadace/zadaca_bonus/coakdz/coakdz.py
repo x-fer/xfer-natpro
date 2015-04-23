@@ -1,0 +1,1 @@
+print 'Cestit Bozic i sretna nova 2012. godina!'

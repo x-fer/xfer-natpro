@@ -1,0 +1,176 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{natprog}
+
+%SANTL
+%OVAJ CLS PREUZET JE KAO ORGINAL ceoi-task
+
+% KOKAN
+% krece s minimalnim postavkama od articlea
+\LoadClass[11pt,a4paper]{article}
+
+\RequirePackage[hmargin={2.5cm,2.5cm},vmargin={5cm,2cm},headheight=84.1pt,headsep=1cm,a4paper]{geometry}
+\RequirePackage{graphicx}
+
+
+% KOKAN
+% ovo ispod nisam ja komentirao, ali zelim napisat kako je dobro sto je komentirano
+% cls fajlove treba pisati s cudesima \v{C}, \'{c} kako bi bili skroz kompatibilni
+% a u glavnom tex fajlu nakon poziva \documentclass{ceoi-task} korisnik treba postaviti encoding koji koristi kroz svoje fajlove
+%\RequirePackage[latin1]{inputenc}
+
+\RequirePackage{pstricks}
+\RequirePackage{calc}
+\RequirePackage{ifthen}
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+\RequirePackage{listings}
+\RequirePackage{amsmath}
+\RequirePackage{sectsty}
+
+\allsectionsfont{\sffamily}
+
+\lstset{basicstyle=\normalsize\ttfamily, commentstyle=\slshape,identifierstyle={}}
+\lstset{language=C++}
+\lstset{postbreak=\space\space, breakindent=0pt, breaklines, showstringspaces=false}
+
+\newboolean{hasnoinputfile}
+\newboolean{hasnooutputfile}
+\DeclareOption{noinputfile}{\setboolean{hasnoinputfile}{true}}
+\DeclareOption{nooutputfile}{\setboolean{hasnooutputfile}{true}}
+\ProcessOptions
+
+\pagestyle{fancy}
+
+
+% KOKAN
+% ovdje radije staviti svugdje \newcommand*, jer naredbe produciraju par rijeci, a ne paragrafe
+% proguglaj malo o razlici \newcommand i \newcommand* (analogno ide i \renew...)
+\newcommand{\TranslationPageOf}[2]{Stranica #1 od #2}
+\newcommand{\TranslationInputFile}{Ulazna datoteka}
+\newcommand{\TranslationOutputFile}{Izlazna datoteka}
+\newcommand{\TranslationSourceFile}{Izvorna datoteka}
+\newcommand{\TranslationTimeLimit}{Vremensko ograni\v{c}enje}
+\newcommand{\TranslationMemoryLimit}{Memorijsko ograni\v{c}enje}
+\newcommand{\TranslationPoints}{Bodovi}
+\newcommand{\TranslationTaskSet}{Zadatak}
+\newcommand{\TranslationInput}{Ulaz}
+\newcommand{\TranslationOutput}{Izlaz}
+\newcommand{\TranslationExample}{Test primjeri}
+\newcommand{\TranslationYear}{2013/2014}
+\newcommand{\TranslationStdIn}{Standardni ulaz}
+\newcommand{\TranslationStdOut}{Standardni izlaz}
+\newcommand{\TranslationAuthor}{Autor}
+\newcommand{\TranslationAddedBy}{Prilagodio/la}
+\def \addedbyflag{true}
+
+\newcommand{\taskauthor}{Ime Prezime}
+\newcommand{\addedby}{Ime Prezime}
+\newcommand{\daynumber}{}    % renew in taskdescription
+\newcommand{\taskname}{}     % renew in taskdescription
+\newcommand{\longtaskname}{} % renew in taskdescription
+\newcommand{\maxpoints}{100} 
+\newcommand{\timelimit}{1 s} 
+\newcommand{\memorylimit}{16 MB}
+\newcommand{\inputfilename}{\ifthenelse{\boolean{hasnoinputfile}}{-}{\TranslationStdIn}}
+\newcommand{\outputfilename}{\ifthenelse{\boolean{hasnooutputfile}}{-}{\TranslationStdOut}}
+\newcommand{\sourcefilename}{\taskname{}.pas/.c/.cpp}
+\newcommand{\countrycode}{DEU}
+\newcommand{\version}{1.0}
+
+\newenvironment{inputSpec}{\subsection*{\TranslationInput}}{}
+\newenvironment{outputSpec}{\subsection*{\TranslationOutput}}{}
+\newenvironment{example}{\subsection*{\TranslationExample}\begin{exampleTable}}{\end{exampleTable}}
+\newenvironment{examples}{\subsection*{\TranslationExample}\begin{exampleTable}}{\end{exampleTable}}
+\newenvironment{constraints}{\subsection*{Constraints}%
+\begin{list}{}{%
+\leftmargin0em%
+\parsep0pt%
+}%
+}{\end{list}}
+\newenvironment{exampleTable}{\begin{tabular}{|p{5cm}|p{5cm}|}
+\hline
+\texttt{\inputfilename} & \texttt{\outputfilename}\\
+\hline%
+}{%
+\end{tabular}}
+\def\exampleInOut{\begingroup\tt\obeylines\obeyspaces\exampleInOutA}
+\def\exampleInOutA#1{#1\endgroup & \begingroup\tt\obeylines\obeyspaces\exampleInOutB}
+\def\exampleInOutB#1{#1\endgroup\\\hline}
+\newcommand{\constraint}[1]{\item #1}
+\newcommand{\limitsSpec}[2]{\subsection*{Limits}\begin{tabbing}
+Memory: \=#1\\
+Time:\>#2
+\end{tabbing}}
+\def\theinputfilename{\texttt{\inputfilename}}
+\def\theoutputfilename{\texttt{\outputfilename}}
+
+
+\newcommand{\svnversion}{\newread\inputstream%
+\immediate\openin\inputstream=.svn/entries
+\ifeof\inputstream%
+\else%
+\immediate\read\inputstream to \auxcommand%
+\immediate\read\inputstream to \auxcommand%
+\immediate\read\inputstream to \auxcommand%
+\immediate\read\inputstream to \auxcommand%
+/\auxcommand\!\!\!
+\fi%
+\immediate\closein\inputstream}
+
+%\overfullrule=3pt
+%\showboxdepth=2 \showboxbreadth=50
+
+\newlength{\LogoLength}\setlength{\LogoLength}{2cm}
+
+
+\lhead{}\rhead{}
+\chead{%
+\setbox1=\vbox{%
+\begin{centering}%\
+{\sffamily\Large Natjecateljsko programiranje}\\[2mm]%
+{\sffamily Fakultet elektrotehnike i ra\v{c}unarstva}\\%
+{\sffamily \TranslationYear}\\%
+{\sffamily \TranslationTaskSet}\\%
+\end{centering}}%
+\newdimen\logoheight\logoheight\ht1%
+\setbox2=\hbox{}
+\newdimen\logowidth\logowidth\wd2
+\hbox{\unhbox2\hskip-\logowidth\box1}%
+\vskip 2mm \hrule\vskip 2mm%
+{\sffamily \setbox1=\hbox{\TranslationPageOf{\thepage}{\pageref{LastPage}}}\newdimen\hs\hs\wd1\unhbox1\hskip-\hs%
+\hfill{}}%
+{\hfill\llap{\sffamily \TranslationPoints: \textbf{\maxpoints}}}%
+\vskip 1mm
+{\sffamily \newdimen\hs\hs\wd1\unhbox1\hskip-\hs%
+\hfill\llap{\sffamily \TranslationTimeLimit: \textbf{\timelimit}}}%
+\vskip 1mm
+{\sffamily \newdimen\hs\hs\wd1\unhbox1\hskip-\hs%
+\hfill\llap{\sffamily \TranslationMemoryLimit: \textbf{\memorylimit}}}}
+
+\lfoot{}\cfoot{}\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\taskheadline}[1]{{\sffamily\bfseries\Large\centering#1\par}}
+
+
+
+\AtBeginDocument{
+\parindent=0pt%
+\parskip=6pt%
+%\headheight=82pt%
+\headsep=40pt%
+%
+\newlength{\WidthOne}  \settowidth{\WidthOne}{\sffamily\bfseries \TranslationInputFile:}%
+\newlength{\WidthTwo}  \settowidth{\WidthTwo}{\sffamily\bfseries \TranslationOutputFile:}%
+\newlength{\WidthThree}\settowidth{\WidthThree}{\sffamily\bfseries \TranslationSourceFile:}%
+\newlength{\WidthFirstCol}\setlength{\WidthFirstCol}{\WidthOne}%
+\ifthenelse{\lengthtest{\WidthTwo   > \WidthFirstCol}}{\setlength{\WidthFirstCol}{\WidthTwo}}{}%
+\ifthenelse{\lengthtest{\WidthThree > \WidthFirstCol}}{\setlength{\WidthFirstCol}{\WidthThree}}{}%
+\addtolength{\WidthFirstCol}{2mm}%
+%
+\newlength{\SecondCol} \settowidth{\SecondCol}{\texttt{\sourcefilename}} \addtolength{\SecondCol}{2mm}%
+\taskheadline{\longtaskname}%
+{\sffamily \TranslationAuthor: \textbf{\taskauthor}}\\%
+\ifthenelse{\equal{\addedby}{}}{}{{\sffamily \TranslationAddedBy: \textbf{\addedby}}\\}
+}%
